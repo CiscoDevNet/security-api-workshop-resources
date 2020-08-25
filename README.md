@@ -1,1 +1,1 @@
-# security-api-workshop--resources
+# security-api-workshop-resources
