@@ -84,6 +84,8 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Constants
 
+webex_token = env.WEBEX_TEAMS_ACCESS_TOKEN
+
 # MISSION01: Assign the correct computer name to the variable.
 # Hint: Refer to Step 1 of the Mission Overview in the lab guide.
 amp_computer_name = "MISSION01"
@@ -234,14 +236,13 @@ def get_umbrella_domain_status(domains,
 ):
     print(white(f"\n==> Checking all associated domains against Umbrella Investigate to retreive their status"))
 
-    url = f"https://{host}/domains/categorization/?showLabels"
+    url = f"https://{host}/domains/categorization/{domain}?showLabels"
+
     # MISSION09: Construct authentication headers for Umbrella Investigate
     env.print_missing_mission_warn(env.get_line()) # Delete this line when mission is complete.
     headers = {'MISSION09':'MISSION09'}
 
-    values = str(json.dumps(domains))
-
-    response = requests.post(url, data=values, headers=headers)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
 
     domains_status = response.json()
@@ -495,7 +496,8 @@ if __name__ == "__main__":
     Step 5. Check all associated domains against Umbrella Investigate to retreive their status.
     """
     print(white(f"\nStep 5"))
-    # MISSION08: Use the right function and pass the correct variable into it to retreive the status of domains associated with Treat Grid sample.
+    # MISSION08: Use the right function and pass the correct variable into it to retreive the status of the first domain associated with Treat Grid sample.
+    # Hint: Remember that numbering starts with 0 in most coding languages.
     env.print_missing_mission_warn(env.get_line()) # Delete this line when mission is complete.
     umbrella_domains_status = 'MISSION08'
 
