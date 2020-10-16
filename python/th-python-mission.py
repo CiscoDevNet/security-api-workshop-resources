@@ -20,7 +20,7 @@ SOFTWARE.
 """
 
 """
-Script Version 1.1
+Script Version 1.2
 Python Mission: Create Threat Investigation & Response Automation Workflow
 
 Mission Steps
@@ -41,7 +41,7 @@ Step 4. Request all domains for a specific sample in Threat Grid and store them 
 
 Missions to complete: MISSION07
 
-Step 5. Check all associated domains against Umbrella Investigate to retreive their status.
+Step 5. Check all associated domains against Umbrella Investigate to retrieve their status.
 
 Missions to complete: MISSION08, MISSION09, MISSION10
 
@@ -208,7 +208,7 @@ def threatgrid_get_domains(sample_id,
     url = f"https://{host}/api/v2/samples/feeds/domains"
     query_params = {
         "sample": sample_id,
-        "after": "2019-01-01",
+        "after": "2020-01-01",
         "api_key": api_key,
     }
 
@@ -222,7 +222,8 @@ def threatgrid_get_domains(sample_id,
     domains = []
     if domains_json:
         for item in domains_json:
-            domains.append(item["domain"])
+            if (item["domain"] not in domains):
+                domains.append(item["domain"])
     else:
         print(red("Unable to retrieve domains on the sha256 submission. Extend timeframe and try again."))
         sys.exit(1)
@@ -230,11 +231,11 @@ def threatgrid_get_domains(sample_id,
     return domains
 
 
-def get_umbrella_domain_status(domains,
+def get_umbrella_domain_status(domain,
     host=env.UMBRELLA.get("inv_url"),
     api_key=env.UMBRELLA_INVESTIGATE_KEY,
 ):
-    print(white(f"\n==> Checking all associated domains against Umbrella Investigate to retreive their status"))
+    print(white(f"\n==> Checking domain against Umbrella Investigate to retrieve its status"))
 
     url = f"https://{host}/domains/categorization/{domain}?showLabels"
 
@@ -245,12 +246,12 @@ def get_umbrella_domain_status(domains,
     response = requests.get(url, headers=headers)
     response.raise_for_status()
 
-    domains_status = response.json()
+    domain_status = response.json()[domain]["status"]
     
-    return domains_status
+    return domain_status
 
 
-def post_umbrella_events(blacklist_domains,
+def post_umbrella_events(blocklist_domains,
     host=env.UMBRELLA.get("en_url"),
     api_key=env.UMBRELLA_ENFORCEMENT_KEY,
 ):
@@ -265,7 +266,7 @@ def post_umbrella_events(blacklist_domains,
     time = datetime.now().isoformat()
     data = []
     
-    for domain in blacklist_domains:
+    for domain in blocklist_domains:
         obj = {
             "alertTime": time + "Z",
             "deviceId": "ba6a59f4-e692-4724-ba36-c28132c761de",
@@ -353,7 +354,7 @@ def ctr_enrich_print_scr_report(intel):
     print(white("\n==> Here is what CTR has found:"))
 
     for module in intel:
-        print(white(f"\n==> Module: {module['module']} : {module['module-type']}"))
+        print(white(f"\n==> Module: {module['module']} : {module['module_type_id']}"))
         if module["data"]:
             if module["module"] == "AMP EDR":
                 print(blue(f"\n  ==> Count of Indicators: {module['data']['indicators']['count']} "))
@@ -493,24 +494,24 @@ if __name__ == "__main__":
     print(green(f"Successfully retrieved domains on the sha256 submission: {threatgrid_sample_domains}"))
 
     """
-    Step 5. Check all associated domains against Umbrella Investigate to retreive their status.
+    Step 5. Check all associated domains against Umbrella Investigate to retrieve their status.
     """
     print(white(f"\nStep 5"))
-    # MISSION08: Use the right function and pass the correct variable into it to retreive the status of the first domain associated with Treat Grid sample.
+    # MISSION08: Use the right function and pass the correct variable into it to retrieve the status of the first domain associated with Treat Grid sample.
     # Hint: Remember that numbering starts with 0 in most coding languages.
     env.print_missing_mission_warn(env.get_line()) # Delete this line when mission is complete.
     umbrella_domains_status = 'MISSION08'
 
     umbrella_malicious_domains = []
     
-    for key in umbrella_domains_status.keys():
-        domain_status = umbrella_domains_status[key]['status']
+    for domain in threatgrid_sample_domains:
+        domain_status = get_umbrella_domain_status(domain)
         if domain_status == 1:
-            print(green(f"The domain {key} is found CLEAN"))
+            print(green(f"The domain {domain} is found CLEAN"))
             env.print_missing_mission_warn(env.get_line()) # Delete this line when mission is complete.
         elif MISSION10: # MISSION10: Put correct condition with proper domain status value to catch Malicious domains
             print(green(f"The domain {key} is found MALICIOUS"))
-            umbrella_malicious_domains.append(key)
+            umbrella_malicious_domains.append(domain)
         elif domain_status == 0:
             print(green(f"The domain {key} is found UNDEFINED"))
 
@@ -519,7 +520,7 @@ if __name__ == "__main__":
     """
     print(white("\nStep 6"))
     
-    umbrella_event_id, umbrella_blacklist_enforcement = post_umbrella_events(umbrella_malicious_domains)
+    umbrella_event_id, umbrella_blocklist_enforcement = post_umbrella_events(umbrella_malicious_domains)
 
     print(green(f"Domains {umbrella_malicious_domains} were accepted, Umbrella event id: {umbrella_event_id}"))
 
@@ -589,11 +590,11 @@ if __name__ == "__main__":
 
     response = post_submission(url, threatgrid_sha, threatgrid_sample_id,
                     threatgrid_sample_domains[0], umbrella_malicious_domains,
-                    umbrella_blacklist_enforcement, ctr_observables,
+                    umbrella_blocklist_enforcement, ctr_observables,
                     ctr_response_url, user["id"])
 
     if response['message'] == "True":
-        print(white("\nCONGRATULATION! You have successfully completed the Python mission! "))
+        print(white("\nCONGRATULATIONS! You have successfully completed the Python mission! "))
     else:
         print(red("\nValidation failed. Please check your solution carefully and try again. Use hints and tips in the lab guide."))
     
