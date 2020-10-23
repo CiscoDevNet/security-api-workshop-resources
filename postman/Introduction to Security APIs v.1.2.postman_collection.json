@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "26faa2ec-75d6-4613-a50c-b4eb44763fc4",
-		"name": "Introduction to Security APIs v.1.1",
+		"name": "Introduction to Security APIs v.1.2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -153,7 +153,7 @@
 								"exec": [
 									"var jsonData = JSON.parse(responseBody); // Parse the response into a variable jsonData",
 									"for (var a in jsonData['data']){ // Loops through simple custom detection lists under 'data' field",
-									"    if (jsonData['data'][a]['name'] == 'File Block-list'){ // Find the list called 'File Blacklist'",
+									"    if (jsonData['data'][a]['name'] == 'File Block-list'){ // Find the list called 'File Block-list'",
 									"        // Create new Postman variable called 'amp4e_file_list' and assign it with the value of GUID.",
 									"        postman.setEnvironmentVariable('amp4e_file_list', jsonData['data'][a]['guid']); ",
 									"    }",
@@ -537,6 +537,45 @@
 					"response": []
 				},
 				{
+					"name": "IOC feeds Copy",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/iocs/feeds/domains?after=2020-01-18T21:39:13Z&before=2020-01-18T22:39:13Z&api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"iocs",
+								"feeds",
+								"domains"
+							],
+							"query": [
+								{
+									"key": "after",
+									"value": "2020-01-18T21:39:13Z"
+								},
+								{
+									"key": "before",
+									"value": "2020-01-18T22:39:13Z"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Feed in JSON format",
 					"request": {
 						"auth": {
@@ -658,11 +697,7 @@
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"var domains = [];",
-									"//for (var a in jsonData['data']['items']){",
-									"    //domains.push (\"\\\"\"+jsonData['data']['items'][a]['domain']+\"\\\"\");",
-									"//    domains.push (jsonData['data']['items'][a]['domain']);",
-									"//}",
-									"//postman.setEnvironmentVariable('threatgrid_sample_domains', domains);",
+									"",
 									"postman.setEnvironmentVariable('threatgrid_sample_domains', jsonData['data']['items'][0]['domain']);"
 								],
 								"type": "text/javascript"
@@ -1346,6 +1381,71 @@
 					"response": []
 				},
 				{
+					"name": "Inspect Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8d8b01d3-1db3-4e69-b471-713ac65304f5",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('ctr_observables', JSON.stringify(jsonData,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"suspicious hash is {{threatgrid_sha}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-inspect/inspect",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-inspect",
+								"inspect"
+							]
+						},
+						"description": "The Inspect API takes in blocks of arbitrary text, and returns a list of formatted observables as a JSON object."
+					},
+					"response": []
+				},
+				{
 					"name": "Enrich - Deliberate",
 					"event": [
 						{
@@ -1428,7 +1528,7 @@
 									"    tests[\"Module: \"+jsonData.data[a].module] = true;",
 									"    i = i+1;",
 									"    if (Object.keys(jsonData.data[a].data).length>0){",
-									"        if (jsonData['data'][a]['module'] == 'AMP EDR'){",
+									"        if (jsonData['data'][a]['module'] == 'AMP for Endpoints'){ // AMP for Endpoints",
 									"            if (jsonData['data'][a].data.indicators){",
 									"                count = jsonData['data'][a].data.indicators.count;",
 									"                if (count > 0){",
@@ -1602,11 +1702,15 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "7d15ebfd-1e27-4fd4-a845-16163969c14e",
+								"id": "0d27c1a6-9f8d-4198-8ab8-08d09892b7a2",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
-									"",
-									"postman.setEnvironmentVariable('ctr_response_url', jsonData['data'][0].url);"
+									"for (var a in jsonData.data)",
+									"{",
+									"    if (jsonData.data[a].id == \"amp-add-sha256-scd\") {",
+									"        postman.setEnvironmentVariable('ctr_response_url', jsonData.data[a].url);",
+									"    }",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -1835,7 +1939,7 @@
 					"response": []
 				},
 				{
-					"name": "Step 3 - Postman Mission Validation Result",
+					"name": "Step 3 - Check Postman Mission Validation Result",
 					"request": {
 						"method": "GET",
 						"header": [],
