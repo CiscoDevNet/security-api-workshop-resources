@@ -385,6 +385,8 @@ def ctr_enrich_print_scr_report(intel):
 def ctr_response_actions(access_token,observables,
     host=env.THREATRESPONSE.get("host"),
 ):
+    """ POST https://{{ctr_host}}/iroh/iroh-response/respond/observables """
+
     print(white("\n==> Fetching the list of available response actions and modules for a given observable..."))
     
     url = f"https://{host}/iroh/iroh-response/respond/observables"
@@ -395,10 +397,16 @@ def ctr_response_actions(access_token,observables,
 
     response = requests.post(url, headers=headers, data=payload)
     response.raise_for_status()
+    # Using list comprehentions [obj[key1] for obj in objects if obj[key2] == value]
+    actions = response.json()["data"]
+    response_url = [action["url"] for action in actions if action["id"] == "amp-add-sha256-scd"]
+    
+    if not response_url:
+        #response_url = None
+        print(red(f"ERROR: Required action is not in the list. Remove sha256 from SCD list and try again. Refer to the lab guide for help."))
+        sys.exit(1)
 
-    response_url = response.json()["data"][0]["url"]
-
-    return response_url
+    return response_url[0]
 
 
 def ctr_add_to_amp_scd(access_token, action_url,
