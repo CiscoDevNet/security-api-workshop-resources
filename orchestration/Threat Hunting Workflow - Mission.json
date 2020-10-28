@@ -174,7 +174,7 @@
               "input_json": "$activity.definition_activity_01JQWO5SNUSZW2doD3fN2ChXOGQK3FJCDoy.output.response_body$",
               "jsonpath_queries": [
                 {
-                  "jsonpath_query": "$..data..file.identity.sha256",
+                  "jsonpath_query": "",
                   "jsonpath_query_name": "sha256",
                   "jsonpath_query_type": "string"
                 }
@@ -191,9 +191,10 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
+              "description": "Request Isolation for a Computer.",
               "display_name": "AMP - Isolate Host",
               "input": {
-                "variable_workflow_01FLAVEEVLIML1kDED2T9JctB4oQUWBVvaQ": ""
+                "variable_workflow_01FLAVEEVLIML1kDED2T9JctB4oQUWBVvaQ": "$activity.definition_activity_01JQWO5B52B516NEwWPJdtlDC2sTEedFTdE.output.variable_workflow_01EO48TNSC7E1064kdBZmuA7JuvJ1ZJtux2$"
               },
               "runtime_user": {
                 "target_default": true
@@ -249,7 +250,6 @@
               "description": "Search for submissions of a given SHA256.",
               "display_name": "TG Get Samples",
               "method": "GET",
-              "relative_url": "/api/v2/search/submissions?q=$activity.definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb.output.jsonpath_queries.sha256$&api_key=$global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q.global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q$",
               "runtime_user": {
                 "override_target_runtime_user": false,
                 "target_default": true
@@ -282,11 +282,12 @@
             "properties": {
               "action_timeout": 180,
               "continue_on_failure": false,
+              "description": "Save the first submission sample ID for further investigation.",
               "display_name": "TG Get First Sample ID",
-              "input_json": "POINT TO THE JSON SOURCE",
+              "input_json": "$activity.definition_activity_01JQWO7804BVZ6jFkk1dbDsaHtdD2aeXlgv.output.response_body$",
               "jsonpath_queries": [
                 {
-                  "jsonpath_query": "$.data",
+                  "jsonpath_query": "$.data.items[0].item.sample",
                   "jsonpath_query_name": "sample",
                   "jsonpath_query_type": "string"
                 }
@@ -342,6 +343,7 @@
             "properties": {
               "action_timeout": 180,
               "continue_on_failure": false,
+              "description": "Get the first domain from the list of associated domains for a given TG sample.",
               "display_name": "TG Get First Domain from the list",
               "input_json": "$activity.definition_activity_01JQWO7VW68771IGi3ulbLnAojt4wMg1sdU.output.response_body$",
               "jsonpath_queries": [
@@ -379,10 +381,11 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
+              "description": "Return domain status, security categories and content categories for a single domain.",
               "display_name": "Umbrella - Investigate - Categorize Single Domain",
               "input": {
                 "variable_workflow_01G5O1SJSIRV61zZs5s3wKG548soQ4obTpU": "$activity.definition_activity_01JQWO87ODVVD5nho7SeHPsPkTpAtmu0Oxa.output.jsonpath_queries.domain$",
-                "variable_workflow_01J3TWVRNF19I7ljPN95AHAtNt9v945FoYV": "$global.01JHKGFSXQ3E02FiGSDjJCjfCNpb0rT5bMe.global.01JHKGFSXQ3E02FiGSDjJCjfCNpb0rT5bMe$"
+                "variable_workflow_01J3TWVRNF19I7ljPN95AHAtNt9v945FoYV": "$global.variable_01JHKGFTDFEF75JMFmE4C5WylRgIa4ZxJI6.global.variable_01JHKGFTDFEF75JMFmE4C5WylRgIa4ZxJI6$"
               },
               "runtime_user": {
                 "target_default": true
@@ -417,6 +420,7 @@
             "properties": {
               "action_timeout": 180,
               "continue_on_failure": false,
+              "description": "Extract domain and it's status from the JSON output of Umbrella Investigate HTML response.",
               "display_name": "Umbrella - Get Domain Status",
               "input_json": "$activity.definition_activity_01JQWO8VA71F02piUEBWWV86eYrkZQEZ9ft.output.variable_workflow_01G5O2K4DAGYI4Tds97lgoNMeD23c1SrDmI$",
               "jsonpath_queries": [
@@ -443,6 +447,7 @@
             "base_type": "activity",
             "properties": {
               "continue_on_failure": false,
+              "description": "Check if the status of this domain is Malicious (value equals -1). Yes - block this domain and continue WF execution. No - Pass and Continue WF execution.",
               "display_name": "Is Domain Malicious?",
               "skip_execution": false
             },
@@ -500,6 +505,7 @@
                     "base_type": "activity",
                     "properties": {
                       "continue_on_failure": false,
+                      "description": "Construct an Umbrella Enforcement event to prevent malware call home.",
                       "display_name": "Umbrella - Create Enforcement Event",
                       "skip_execution": false,
                       "variables_to_update": [
@@ -525,6 +531,7 @@
                       "content_type": "application/json",
                       "continue_on_error_status_code": false,
                       "continue_on_failure": false,
+                      "description": "Contain the threat using Umbrella Enforcement and block Malware execution so that it can’t call home.",
                       "display_name": "Umbrella - Block Domain",
                       "method": "POST",
                       "relative_url": "events?customerKey=$global.variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi.global.variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi$",
@@ -559,6 +566,7 @@
                     "base_type": "activity",
                     "properties": {
                       "continue_on_failure": false,
+                      "description": "Save Umbrella block list variable for Mission validation in the last section.",
                       "display_name": "Save variables for validation",
                       "skip_execution": false,
                       "variables_to_update": [
@@ -598,6 +606,7 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
+              "description": "Generate CTR Access Token",
               "display_name": "CTR Generate Access Token",
               "runtime_user": {
                 "target_default": true
@@ -625,13 +634,14 @@
           },
           {
             "unique_name": "definition_activity_01JQWOC8N1AT16B1HduyjYjayfqdt02VfgW",
-            "name": "CTRInspect",
-            "title": "CTRInspect",
+            "name": "CTR Inspect",
+            "title": "CTR Inspect",
             "type": "workflow.atomic_workflow",
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
-              "display_name": "CTRInspect",
+              "description": "The Inspect API takes in blocks of arbitrary text, and returns a list of formatted observables as a JSON object.",
+              "display_name": "CTR Inspect",
               "input": {
                 "variable_workflow_01C9F46FN86EW70gxvx7jTcwKMObdpaAPck": "Bears, beets, Battlestar Galactica, $activity.definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb.output.jsonpath_queries.sha256$",
                 "variable_workflow_01C9F4PDGN5725qpK8sofdFmV1hrTAcYaGb": "$activity.definition_activity_01JQWOBPPMR483EDtxthUsDEq7smVI89aDj.output.variable_workflow_01BNOOXA3G6MV1PGAvsfZOKDdMYcE6XS726$"
@@ -668,7 +678,7 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
-              "description": "List available action for AMP for Endpoints module.",
+              "description": "List available actions for AMP for Endpoints module.",
               "display_name": "CTR List Actions",
               "input": {
                 "variable_workflow_01DBYEK861JR84w4pjFDDI1bkoc1GoFxUzy": "sha256",
@@ -702,14 +712,14 @@
           {
             "unique_name": "definition_activity_01JQWOD7Q7LFL72uV9ic4QZWsyoci3jbyoi",
             "name": "JSONPath Query",
-            "title": "Get Action URL",
+            "title": "CTR Get Action URL",
             "type": "corejava.jsonpathquery",
             "base_type": "activity",
             "properties": {
               "action_timeout": 180,
               "continue_on_failure": false,
               "description": "Get Action URL from CTR response to add/remove sha256 to/from Simple Customer Detection list in AMP for Endpoints.",
-              "display_name": "Get Action URL",
+              "display_name": "CTR Get Action URL",
               "input_json": "$activity.definition_activity_01JQWOCQZGPH65GoUi0ef9V8tzpwuzXKXdl.output.variable_workflow_01DBYDZ93SS5K4rAnOFkPjegb7K8ChItJMS$",
               "jsonpath_queries": [
                 {
@@ -775,6 +785,8 @@
             "type": "workflow.atomic_workflow",
             "base_type": "subworkflow",
             "properties": {
+              "continue_on_failure": false,
+              "description": "Create SecureX casebook to share and maintain context around the incident.\nThe casebook should contain the following observables: SHA256 hash, malicious domain.\nDescription should contain the following information: “Malware has been executed on the workstation <Computer GUID>”.",
               "display_name": "CTR Create Casebook",
               "input": {
                 "variable_workflow_01E8OQUDV95VA45dnDR0Kzm5HlMxNSnk7HH": "",
@@ -786,6 +798,7 @@
               "runtime_user": {
                 "target_default": true
               },
+              "skip_execution": false,
               "target": {
                 "target_type": "web-service.endpoint",
                 "use_workflow_target": true
@@ -832,6 +845,7 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
+              "description": "Fill in missing input parameters in the workflow properties below to validate your solution.",
               "display_name": "FJ MISSION VALIDATION",
               "input": {
                 "variable_workflow_01JNI1FSLLPC920Rt016NDAZuLukFtxQrua": "TG SAMPLE DOMAIN",
@@ -923,16 +937,27 @@
         "is_required": false
       },
       "object_type": "variable"
+    },
+    "variable_01JHKGFTDFEF75JMFmE4C5WylRgIa4ZxJI6": {
+      "unique_name": "variable_01JHKGFTDFEF75JMFmE4C5WylRgIa4ZxJI6",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Umbrella Investigate Token",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
     }
   },
   "atomic_workflows": [
+    "definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF",
+    "definition_workflow_01EO48TO48SL35JnXGSvBIqptIfbsjt65eR",
     "definition_workflow_01FLAVEFJ8QLQ7UEi6gFNp1yotu1K18VEZS",
+    "definition_workflow_01G5O02N3T9NE0uN8IfRFUh7UzLG7IdEWlq",
     "definition_workflow_01DBY5MO9LF981MXZeedBSbaIpOSx3NRF2Q",
     "definition_workflow_01DS6ELBOO8YR3uFJZju566LqiqR18VlE6r",
-    "definition_workflow_01G5O02N3T9NE0uN8IfRFUh7UzLG7IdEWlq",
-    "definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF",
     "definition_workflow_01779LB6MV0P02kvka9TGV5cEam84NrCTy4",
-    "definition_workflow_01EO48TO48SL35JnXGSvBIqptIfbsjt65eR",
     "definition_workflow_01C9F1VJ1I5KH26f860hJC5zDSD33548bYS"
   ]
 }
