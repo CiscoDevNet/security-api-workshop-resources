@@ -1,0 +1,938 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01JQWO3R9C25F5kwbjJRqOilygqdAASR50C",
+    "name": "Threat Hunting Workflow - Mission",
+    "title": "Threat Hunting Workflow - Mission",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Umbrella Enforcement Event",
+          "type": "datatype.string",
+          "description": "Umbrella Enforcement Event",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01JQWO3QZ1X9K483rEUvbIcvBKKFYdbvoK2",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Umbrella Block List",
+          "type": "datatype.string",
+          "description": "Umbrella Block List",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01JQWO3QZ1U0T2dnSffnwlKXl5VsaC3jC8e",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "Mission: Automate threat investigation with SecureX orchestration workflow \n\nRequired Targets:\n- CTR_For_Access_Token (default)\n- CTR_API (default)\n- Private_CTIA_Target (default)\n- Umbrella_Enforcement_Target\n- Umbrella_Investigate_Target\n- Webex_Teams_Target\n\nRequired Account Keys:\n- CTR_Credentials\n- AMP_Credentials\n\nRequired Global Variables:\n- Webex Teams Token (Secure String)\n- Webex Teams Room ID (String)\n- ThreatGrid API key (Secure String)\n- Umbrella Investigate Token (Secure String)\n- Umbrella Enforcement Token (Secure String)\n\nRequired Atomic Actions:\n- Umbrella - Investigate - Categorize Single Domain\n- FJ MISSION VALIDATION",
+      "display_name": "Threat Hunting Workflow - Mission",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": true,
+        "target_group": {
+          "target_group_id": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+          "run_on_all_targets": false,
+          "selected_target_types": [
+            "web-service.endpoint"
+          ],
+          "use_criteria": {
+            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+            "conditions": [
+              {
+                "operator": "eq",
+                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                "right_operand": "CTR_API"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01JQWO4SK3LIK0K7qt6zoJmvn5cLFVpsFLP",
+        "name": "Group",
+        "title": "AMP",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "1. Get a list of all the events of \"Executed Malware\" type for a specific computer named `Demo_AMP_Threat_Audit`.\n2. Capture malicious sha256 associated with the first \"Executed malware\" event.\n3. Isolate infected Computer to perform further investigation and make sure that the action was successful.",
+          "display_name": "AMP",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01JQWO5B52B516NEwWPJdtlDC2sTEedFTdE",
+            "name": "AMP - Get Connector GUID",
+            "title": "AMP - Get Connector GUID",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "description": "Get AMP Connector GUID for \"Demo_AMP_Threat_Audit\" computer.",
+              "display_name": "AMP - Get Connector GUID",
+              "input": {
+                "variable_workflow_01EO48TNSC9JC3uWgLAXfEGqYO8MmKD2Ail": "",
+                "variable_workflow_01EO48TNSCBGM4spAE6GGj77kIra5ERGlgX": "Demo_AMP_Threat_Audit"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "AMP_Target"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01EO48TO48SL35JnXGSvBIqptIfbsjt65eR"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO5SNUSZW2doD3fN2ChXOGQK3FJCDoy",
+            "name": "HTTP Request",
+            "title": "AMP - Find \"Executed Malware\" Event",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "application/json",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "content_type": "application/json",
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "description": "Get the last event of \"Executed Malware\" type for a specific computer.",
+              "display_name": "AMP - Find \"Executed Malware\" Event",
+              "method": "GET",
+              "relative_url": "events?connector_guid[]=$activity.definition_activity_01JQWO5B52B516NEwWPJdtlDC2sTEedFTdE.output.variable_workflow_01EO48TNSC7E1064kdBZmuA7JuvJ1ZJtux2$&event_type[]=1107296272&limit=1",
+              "runtime_user": {
+                "override_target_runtime_user": true,
+                "runtime_user_id": "definition_runtime_user_01FY04FS5383C68ZjYaUEB4OD4VbhKn3SRQ"
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "AMP_Target"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb",
+            "name": "JSONPath Query",
+            "title": "Get sha256",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "description": "Save the value of malicious file's sha256, associated with this event into a ctivity preperty \"sha256\".",
+              "display_name": "Get sha256",
+              "input_json": "$activity.definition_activity_01JQWO5SNUSZW2doD3fN2ChXOGQK3FJCDoy.output.response_body$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$..data..file.identity.sha256",
+                  "jsonpath_query_name": "sha256",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO6G9M7350UtM2ctg6DZo5ogLxIfmTf",
+            "name": "AMP - Isolate Host",
+            "title": "AMP - Isolate Host",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "AMP - Isolate Host",
+              "input": {
+                "variable_workflow_01FLAVEEVLIML1kDED2T9JctB4oQUWBVvaQ": ""
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "AMP_Target"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01FLAVEFJ8QLQ7UEi6gFNp1yotu1K18VEZS"
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01JQWO6W87LQX4TanNaZir7jiUjhtwM3qfn",
+        "name": "Group",
+        "title": "Threat Grid",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "1. Find all samples, associated with malicious sha256 that you have captured in previous steps and look at analysis report for the first sample on the list.\n2. Request all domains for a specific sample in Threat Grid and store the first domain into a variable to get more data out of it.",
+          "display_name": "Threat Grid",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01JQWO7804BVZ6jFkk1dbDsaHtdD2aeXlgv",
+            "name": "HTTP Request",
+            "title": "TG Get Samples",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "description": "Search for submissions of a given SHA256.",
+              "display_name": "TG Get Samples",
+              "method": "GET",
+              "relative_url": "/api/v2/search/submissions?q=$activity.definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb.output.jsonpath_queries.sha256$&api_key=$global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q.global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q$",
+              "runtime_user": {
+                "override_target_runtime_user": false,
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "ThreatGrid_Target"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO7KBENLF6l24kv3oQr7Mh2A3i810O9",
+            "name": "JSONPath Query",
+            "title": "TG Get First Sample ID",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "TG Get First Sample ID",
+              "input_json": "POINT TO THE JSON SOURCE",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.data",
+                  "jsonpath_query_name": "sample",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO7VW68771IGi3ulbLnAojt4wMg1sdU",
+            "name": "HTTP Request",
+            "title": "TG Get Sample Domains to Analyze",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "description": "Request all domains for a specific sample in TG.",
+              "display_name": "TG Get Sample Domains to Analyze",
+              "method": "GET",
+              "relative_url": "/api/v2/samples/feeds/domains?after=2020-02-01&sample=$activity.definition_activity_01JQWO7KBENLF6l24kv3oQr7Mh2A3i810O9.output.jsonpath_queries.sample$&api_key=$global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q.global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q$",
+              "runtime_user": {
+                "override_target_runtime_user": false,
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "ThreatGrid_Target"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO87ODVVD5nho7SeHPsPkTpAtmu0Oxa",
+            "name": "JSONPath Query",
+            "title": "TG Get First Domain from the list",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "TG Get First Domain from the list",
+              "input_json": "$activity.definition_activity_01JQWO7VW68771IGi3ulbLnAojt4wMg1sdU.output.response_body$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.data.items[0].domain",
+                  "jsonpath_query_name": "domain",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01JQWO8ICTXHH76UpZ8ce8O9seKl8Q7YCnh",
+        "name": "Group",
+        "title": "Umbrella",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "1. Check the first associated domain against Umbrella Investigate to retrieve its status.\n2.  Using Umbrella Enforcement, post malware event to the API for processing and adding to a customer's domain lists.",
+          "display_name": "Umbrella",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01JQWO8VA71F02piUEBWWV86eYrkZQEZ9ft",
+            "name": "Umbrella - Investigate - Categorize Single Domain",
+            "title": "Umbrella - Investigate - Categorize Single Domain",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Umbrella - Investigate - Categorize Single Domain",
+              "input": {
+                "variable_workflow_01G5O1SJSIRV61zZs5s3wKG548soQ4obTpU": "$activity.definition_activity_01JQWO87ODVVD5nho7SeHPsPkTpAtmu0Oxa.output.jsonpath_queries.domain$",
+                "variable_workflow_01J3TWVRNF19I7ljPN95AHAtNt9v945FoYV": "$global.01JHKGFSXQ3E02FiGSDjJCjfCNpb0rT5bMe.global.01JHKGFSXQ3E02FiGSDjJCjfCNpb0rT5bMe$"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "Umbrella_Investigate_Target"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01G5O02N3T9NE0uN8IfRFUh7UzLG7IdEWlq"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO9BX14NI4LuMEpJjKwZYlzngOSv9go",
+            "name": "JSONPath Query",
+            "title": "Umbrella - Get Domain Status",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "Umbrella - Get Domain Status",
+              "input_json": "$activity.definition_activity_01JQWO8VA71F02piUEBWWV86eYrkZQEZ9ft.output.variable_workflow_01G5O2K4DAGYI4Tds97lgoNMeD23c1SrDmI$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.*~",
+                  "jsonpath_query_name": "domain",
+                  "jsonpath_query_type": "string"
+                },
+                {
+                  "jsonpath_query": "$..status",
+                  "jsonpath_query_name": "status",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWO9MVDYUH0gGM9pv4KKXpGRQ9V4QVJB",
+            "name": "Condition Block",
+            "title": "Is Domain Malicious?",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Is Domain Malicious?",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_01JQWO9X9U5LV6IEzjshssgtuttzLnq2kPM",
+                "name": "Condition Branch",
+                "title": "Yes",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01JQWO9BX14NI4LuMEpJjKwZYlzngOSv9go.output.jsonpath_queries.status$",
+                    "operator": "eq",
+                    "right_operand": "-1"
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "Yes",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01JQWOA2ANIBG1Qtr5SXzbkKEZvcJAcbnT2",
+                    "name": "Execute Python Script",
+                    "title": "Extract Domain from Umbrella output",
+                    "type": "python3.script",
+                    "base_type": "activity",
+                    "properties": {
+                      "action_timeout": 180,
+                      "continue_on_failure": false,
+                      "description": "Extract Domain from Umbrella output",
+                      "display_name": "Extract Domain from Umbrella output",
+                      "script": "import json\nimport sys\n\ninput = json.loads(sys.argv[1])\n\ndomain = list(input.keys())\n\noutput = domain[0]",
+                      "script_arguments": [
+                        "$activity.definition_activity_01JQWO8VA71F02piUEBWWV86eYrkZQEZ9ft.output.variable_workflow_01G5O2K4DAGYI4Tds97lgoNMeD23c1SrDmI$"
+                      ],
+                      "script_queries": [
+                        {
+                          "script_query": "output",
+                          "script_query_name": "domain",
+                          "script_query_type": "string"
+                        }
+                      ],
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_01JQWOADMSTWZ4sYHNUDT0ctYsru1nUDnz3",
+                    "name": "Set Variables",
+                    "title": "Umbrella - Create Enforcement Event",
+                    "type": "core.set_multiple_variables",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Umbrella - Create Enforcement Event",
+                      "skip_execution": false,
+                      "variables_to_update": [
+                        {
+                          "variable_to_update": "$workflow.definition_workflow_01JQWO3R9C25F5kwbjJRqOilygqdAASR50C.local.variable_workflow_01JQWO3QZ1X9K483rEUvbIcvBKKFYdbvoK2$",
+                          "variable_value_new": "{\"alertTime\": \"2020-10-23T19:33:39.708Z\",\n\"deviceId\": \"f2018fa2-a440-1631-3a62-bca75ee9d1c0\",\n\"deviceVersion\": \"13.7a\",\n\"dstDomain\": \"$activity.definition_activity_01JQWOA2ANIBG1Qtr5SXzbkKEZvcJAcbnT2.output.script_queries.domain$\",\n\"dstUrl\": \"$activity.definition_activity_01JQWOA2ANIBG1Qtr5SXzbkKEZvcJAcbnT2.output.script_queries.domain$\",\n\"eventTime\": \"2020-10-23T19:33:39.708Z\",\n\"protocolVersion\": \"1.0a\",\n\"providerName\": \"Security Platform\",\n\"disableDstSafeguards\": true,\n\"eventSeverity\":\"Severe\"}"
+                        }
+                      ]
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_01JQWOAP5K6914m4Wq3kwf4nxmDDIcmQoI7",
+                    "name": "HTTP Request",
+                    "title": "Umbrella - Block Domain",
+                    "type": "web-service.http_request",
+                    "base_type": "activity",
+                    "properties": {
+                      "accept": "application/json",
+                      "action_timeout": 180,
+                      "allow_auto_redirect": true,
+                      "body": "$workflow.definition_workflow_01JQWO3R9C25F5kwbjJRqOilygqdAASR50C.local.variable_workflow_01JQWO3QZ1X9K483rEUvbIcvBKKFYdbvoK2$",
+                      "content_type": "application/json",
+                      "continue_on_error_status_code": false,
+                      "continue_on_failure": false,
+                      "display_name": "Umbrella - Block Domain",
+                      "method": "POST",
+                      "relative_url": "events?customerKey=$global.variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi.global.variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi$",
+                      "runtime_user": {
+                        "override_target_runtime_user": false,
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "override_workflow_target_group_criteria": true,
+                        "target_group": {
+                          "use_criteria": {
+                            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                            "conditions": [
+                              {
+                                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                                "operator": "eq",
+                                "right_operand": "Umbrella_Enforcement_Target"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_01JQWOB119AW00CB64HpvUjs8YLvMe94q2n",
+                    "name": "Set Variables",
+                    "title": "Save variables for validation",
+                    "type": "core.set_multiple_variables",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Save variables for validation",
+                      "skip_execution": false,
+                      "variables_to_update": [
+                        {
+                          "variable_to_update": "$workflow.definition_workflow_01JQWO3R9C25F5kwbjJRqOilygqdAASR50C.local.variable_workflow_01JQWO3QZ1U0T2dnSffnwlKXl5VsaC3jC8e$",
+                          "variable_value_new": "[\"$activity.definition_activity_01JQWOA2ANIBG1Qtr5SXzbkKEZvcJAcbnT2.output.script_queries.domain$\"]"
+                        }
+                      ]
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01JQWOBBWWT6C4zvqoUSAEcbm8jmSZvO7fV",
+        "name": "Group",
+        "title": "Threat Response",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "1. Inspect unformatted text to retrieve observable with malicious sha256 that has been found on our network.\n2. Use response capabilities of AMP for Endpoints module in SecureX Threat Response to block this malicious file from execution on all computers in the network.\n3. Create Threat Response casebook with SHA256 as an observable and document all completed actions.",
+          "display_name": "Threat Response",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01JQWOBPPMR483EDtxthUsDEq7smVI89aDj",
+            "name": "CTR Generate Access Token",
+            "title": "CTR Generate Access Token",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "CTR Generate Access Token",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "CTR_For_Access_Token"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01779LB6MV0P02kvka9TGV5cEam84NrCTy4"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWOC8N1AT16B1HduyjYjayfqdt02VfgW",
+            "name": "CTRInspect",
+            "title": "CTRInspect",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "CTRInspect",
+              "input": {
+                "variable_workflow_01C9F46FN86EW70gxvx7jTcwKMObdpaAPck": "Bears, beets, Battlestar Galactica, $activity.definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb.output.jsonpath_queries.sha256$",
+                "variable_workflow_01C9F4PDGN5725qpK8sofdFmV1hrTAcYaGb": "$activity.definition_activity_01JQWOBPPMR483EDtxthUsDEq7smVI89aDj.output.variable_workflow_01BNOOXA3G6MV1PGAvsfZOKDdMYcE6XS726$"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "CTR_API"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01C9F1VJ1I5KH26f860hJC5zDSD33548bYS"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWOCQZGPH65GoUi0ef9V8tzpwuzXKXdl",
+            "name": "CTR List Actions",
+            "title": "CTR List Actions",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "description": "List available action for AMP for Endpoints module.",
+              "display_name": "CTR List Actions",
+              "input": {
+                "variable_workflow_01DBYEK861JR84w4pjFDDI1bkoc1GoFxUzy": "sha256",
+                "variable_workflow_01DBYF0AOVGVR20gz1OEgDx7i2Y2lnrr4mT": "$activity.definition_activity_01JQWO64D9WZB26i27PBwdAqKK5HnIGVjQb.output.jsonpath_queries.sha256$",
+                "variable_workflow_01DBZ4EAOYVFJ0yY3VzkdOSJmyXf0X5OmfZ": "$activity.definition_activity_01JQWOBPPMR483EDtxthUsDEq7smVI89aDj.output.variable_workflow_01BNOOXA3G6MV1PGAvsfZOKDdMYcE6XS726$"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "CTR_API"
+                      }
+                    ]
+                  }
+                }
+              },
+              "workflow_id": "definition_workflow_01DBY5MO9LF981MXZeedBSbaIpOSx3NRF2Q"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWOD7Q7LFL72uV9ic4QZWsyoci3jbyoi",
+            "name": "JSONPath Query",
+            "title": "Get Action URL",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "description": "Get Action URL from CTR response to add/remove sha256 to/from Simple Customer Detection list in AMP for Endpoints.",
+              "display_name": "Get Action URL",
+              "input_json": "$activity.definition_activity_01JQWOCQZGPH65GoUi0ef9V8tzpwuzXKXdl.output.variable_workflow_01DBYDZ93SS5K4rAnOFkPjegb7K8ChItJMS$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$..data[?(@.module==\"AMP for Endpoints\")].url",
+                  "jsonpath_query_name": "action_url",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQWODOOVYEW3JbMu5THK1nMxHRCoJX2nv",
+            "name": "HTTP Request",
+            "title": "CTR - Trigger Action",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "application/json",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "content_type": "application/json",
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer $activity.definition_activity_01JQWOBPPMR483EDtxthUsDEq7smVI89aDj.output.variable_workflow_01BNOOXA3G6MV1PGAvsfZOKDdMYcE6XS726$"
+                }
+              ],
+              "description": "Trigger an action available for AMP for Endpoints module.",
+              "display_name": "CTR - Trigger Action",
+              "method": "POST",
+              "relative_url": "/iroh-response$activity.definition_activity_01JQWOD7Q7LFL72uV9ic4QZWsyoci3jbyoi.output.jsonpath_queries.action_url$",
+              "runtime_user": {
+                "override_target_runtime_user": false,
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "CTR_API"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01JQX683A386J0q0Ye0aysDYiJHzWWAi3kz",
+            "name": "CTR Create Casebook",
+            "title": "CTR Create Casebook",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "display_name": "CTR Create Casebook",
+              "input": {
+                "variable_workflow_01E8OQUDV95VA45dnDR0Kzm5HlMxNSnk7HH": "",
+                "variable_workflow_01FI7GJDK40MI6qNg2jcng0YaHlmz0Zgwq5": "",
+                "variable_workflow_01FI7JJEVXRFA5s9maRdVwlqV7ENc6KhST2": "",
+                "variable_workflow_01FI7NA9QZI9I46crflRbf7I6zIfajxuHrX": "",
+                "variable_workflow_01FRLITVY3NO678mmPZHG5lCdqLjEyY2j1h": "raw"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "target": {
+                "target_type": "web-service.endpoint",
+                "use_workflow_target": true
+              },
+              "workflow_id": "definition_workflow_01DS6ELBOO8YR3uFJZju566LqiqR18VlE6r"
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01JQWOE0CCR305siJV3gTOqwHbSnxSArzcQ",
+        "name": "Group",
+        "title": "Webex Teams",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Send Webex Teams notifications to a Triage Teams Space.",
+          "display_name": "Webex Teams",
+          "skip_execution": true
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JQWOEBUVIW570PiA5J9Vjsd8Zdp3Z8XzQ",
+        "name": "Group",
+        "title": "Mission Validation",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Validate your solution to mark the mission complete.",
+          "display_name": "Mission Validation",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01JQWOEV45WXJ2dUVzPZ3irSHI1uGI4OjPz",
+            "name": "FJ MISSION VALIDATION",
+            "title": "FJ MISSION VALIDATION",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "FJ MISSION VALIDATION",
+              "input": {
+                "variable_workflow_01JNI1FSLLPC920Rt016NDAZuLukFtxQrua": "TG SAMPLE DOMAIN",
+                "variable_workflow_01JNI1FSLLS7V4GjqHPlcMg2HG3smtPBweq": "",
+                "variable_workflow_01JNI1FSLLTME14qjipVW0msC0I33Jy1NpI": "UMBRELLA ENFORCEMENT EVENT",
+                "variable_workflow_01JNI1FSLLVMR2b8DhB0av9wIqPRHZyqwtZ": "UMBRELLA BLOCK LIST",
+                "variable_workflow_01JNI1FSLLWU31F5uuQYjWBAyNshLq3JTve": "CTR OBSERVABLES",
+                "variable_workflow_01JNI1FSLLXYD4mS0HbuTXEqU7TMc071I08": "SHA256",
+                "variable_workflow_01JNI1FSLM09J2pvrQv61zNzfeBf2M5hoBF": "CTR RESPONSE URL",
+                "variable_workflow_01JNI1FSLM1FH0B2XOAy5zWqHkoVO1D6w5K": "TG SAMPLE ID"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "no_target": true
+              },
+              "workflow_id": "definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF"
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "runtime_users": {
+    "definition_runtime_user_01FY04FS5383C68ZjYaUEB4OD4VbhKn3SRQ": {
+      "unique_name": "definition_runtime_user_01FY04FS5383C68ZjYaUEB4OD4VbhKn3SRQ",
+      "name": "AMP_Credentials",
+      "title": "AMP_Credentials",
+      "description": "Account Key for AMP",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "display_name": "AMP_Credentials"
+      }
+    }
+  },
+  "target_groups": {
+    "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
+      "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+      "name": "Default TargetGroup",
+      "title": "Default TargetGroup",
+      "type": "generic.target_group",
+      "base_type": "target_group",
+      "version": "1.0.0",
+      "targets": [
+        {
+          "data_target_type": "web-service.endpoint",
+          "view_target_type": "web-service.endpoint",
+          "include_all_targets": true
+        },
+        {
+          "data_target_type": "email.smtp_endpoint",
+          "view_target_type": "email.smtp_endpoint",
+          "include_all_targets": true
+        }
+      ],
+      "object_type": "target_group"
+    }
+  },
+  "variables": {
+    "variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q": {
+      "unique_name": "variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "ThreatGrid API key",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi": {
+      "unique_name": "variable_01I53FDECXBWL3W70Ov85yTMmzm3rEshQgi",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Umbrella Enforcement Token",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01FLAVEFJ8QLQ7UEi6gFNp1yotu1K18VEZS",
+    "definition_workflow_01DBY5MO9LF981MXZeedBSbaIpOSx3NRF2Q",
+    "definition_workflow_01DS6ELBOO8YR3uFJZju566LqiqR18VlE6r",
+    "definition_workflow_01G5O02N3T9NE0uN8IfRFUh7UzLG7IdEWlq",
+    "definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF",
+    "definition_workflow_01779LB6MV0P02kvka9TGV5cEam84NrCTy4",
+    "definition_workflow_01EO48TO48SL35JnXGSvBIqptIfbsjt65eR",
+    "definition_workflow_01C9F1VJ1I5KH26f860hJC5zDSD33548bYS"
+  ]
+}

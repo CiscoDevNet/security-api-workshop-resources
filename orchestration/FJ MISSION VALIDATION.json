@@ -1,0 +1,450 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF",
+    "name": "FJ MISSION VALIDATION",
+    "title": "FJ MISSION VALIDATION",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Webex Token",
+          "type": "datatype.secure_string",
+          "description": "Student Webex Token information goes here.",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLS7V4GjqHPlcMg2HG3smtPBweq",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "TG SAMPLE ID",
+          "type": "datatype.string",
+          "description": "Threat Grid Sample ID",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLM1FH0B2XOAy5zWqHkoVO1D6w5K",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Umbrella Block List",
+          "type": "datatype.string",
+          "description": "Umbrella Block List",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLVMR2b8DhB0av9wIqPRHZyqwtZ",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "SHA256",
+          "type": "datatype.string",
+          "description": "Malicious file sha256 from AMP for Endpoints event.",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLXYD4mS0HbuTXEqU7TMc071I08",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "CTR Observables",
+          "type": "datatype.string",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLWU31F5uuQYjWBAyNshLq3JTve",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Validation Result",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLZ4I1VFtM3TEutwLjtkKrCElJC",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Umbrella Enforcement Event",
+          "type": "datatype.string",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLTME14qjipVW0msC0I33Jy1NpI",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "TG SAMPLE DOMAIN",
+          "type": "datatype.string",
+          "description": "The first domain associated with the Treat Grid Sample.",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLLPC920Rt016NDAZuLukFtxQrua",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "CTR Response URL",
+          "type": "datatype.string",
+          "description": "CTR Response URL",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01JNI1FSLM09J2pvrQv61zNzfeBf2M5hoBF",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Workflows",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "This Workflow validates the Fire Jumper Orchestration mission.",
+      "display_name": "FJ MISSION VALIDATION",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": false,
+        "execute_on_workflow_target": false,
+        "no_target": true,
+        "specify_on_workflow_start": false
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01JNI1HB8O3UT0TXxZqkhv3Q5yfqrJd4Do8",
+        "name": "HTTP Request",
+        "title": "Fetch Webex User Deitals",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLS7V4GjqHPlcMg2HG3smtPBweq$"
+            }
+          ],
+          "display_name": "Fetch Webex User Deitals",
+          "method": "GET",
+          "relative_url": "/v1/people/me",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01GFV0RAKXT9C0NR8TSTvDT875Nkj2e0AVP"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JNI1HQI9KW95MdRLZpUqXEZ6fje8ZkYe0",
+        "name": "JSONPath Query",
+        "title": "Extract User Webex Details",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "description": "Id and email",
+          "display_name": "Extract User Webex Details",
+          "input_json": "$activity.definition_activity_01JNI1HB8O3UT0TXxZqkhv3Q5yfqrJd4Do8.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.id",
+              "jsonpath_query_name": "webex_id",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.emails[0]",
+              "jsonpath_query_name": "email",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JNI1IJEOPIH4wlTk1apbxpRmpiDGG2Fm7",
+        "name": "HTTP Request",
+        "title": "Check validation  status",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "User-Agent",
+              "value": "python-firejumper-mission-api"
+            }
+          ],
+          "display_name": "Check validation  status",
+          "method": "GET",
+          "relative_url": "/sxo/status/$activity.definition_activity_01JNI1HQI9KW95MdRLZpUqXEZ6fje8ZkYe0.output.jsonpath_queries.webex_id$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": true,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01JK26DLFGA232SXSts6EEwQLFWzWM7PruF"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JNI1J6TXWYJ3ewBnXUEWws2IPberVuHZq",
+        "name": "HTTP Request",
+        "title": "Validate Mission",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "{\n    \"threatgrid_sha\": \"$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLXYD4mS0HbuTXEqU7TMc071I08$\",\n    \"threatgrid_sample_id\": \"$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLM1FH0B2XOAy5zWqHkoVO1D6w5K$\",\n    \"threatgrid_sample_domains\": \"$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLPC920Rt016NDAZuLukFtxQrua$\",\n    \"umbrella_block_list\": [\"$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLVMR2b8DhB0av9wIqPRHZyqwtZ$\"],\n    \"umbrella_blocklist_enforcement\": $workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLTME14qjipVW0msC0I33Jy1NpI$,\n    \"ctr_observables\": $workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLLWU31F5uuQYjWBAyNshLq3JTve$,\n    \"ctr_response_url\": \"$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.input.variable_workflow_01JNI1FSLM09J2pvrQv61zNzfeBf2M5hoBF$\",\n    \"webex_id\":\"$activity.definition_activity_01JNI1HQI9KW95MdRLZpUqXEZ6fje8ZkYe0.output.jsonpath_queries.webex_id$\"\n}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "User-Agent",
+              "value": "sxo-firejumper-mission-api"
+            }
+          ],
+          "display_name": "Validate Mission",
+          "method": "POST",
+          "relative_url": "/sxo/submit",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01JK26DLFGA232SXSts6EEwQLFWzWM7PruF"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JNI1JN9BMRY5jyInMbxO3iB2WfOn5RPpl",
+        "name": "JSONPath Query",
+        "title": "Extract validation result",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Extract validation result",
+          "input_json": "$activity.definition_activity_01JNI1J6TXWYJ3ewBnXUEWws2IPberVuHZq.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.message",
+              "jsonpath_query_name": "message",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01JNI1K9F9UJ16YRqybV6CeQSpotGJPPrLj",
+        "name": "Condition Block",
+        "title": "Was validation successful?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was validation successful?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01JNI1KULD35866mdCVoKhw5KJMffZQK4Cz",
+            "name": "Condition Branch",
+            "title": "Yes",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01JNI1JN9BMRY5jyInMbxO3iB2WfOn5RPpl.output.jsonpath_queries.message$",
+                "operator": "eq",
+                "right_operand": "True"
+              },
+              "continue_on_failure": false,
+              "display_name": "Yes",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01JNI1KZ2RRL67TSUkIKYXLJGXSK1L9RxQu",
+                "name": "Set Variables",
+                "title": "Set Validation message",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Validation message",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.output.variable_workflow_01JNI1FSLLZ4I1VFtM3TEutwLjtkKrCElJC$",
+                      "variable_value_new": "Congratulations! You have successfully completed the SecureX Orchestration Mission!"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01JNI1LJP3VQ94p1XLJVxFPyqrdxApaFLEq",
+            "name": "Condition Branch",
+            "title": "No",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01JNI1JN9BMRY5jyInMbxO3iB2WfOn5RPpl.output.jsonpath_queries.message$",
+                "operator": "eq",
+                "right_operand": "Fasle"
+              },
+              "continue_on_failure": false,
+              "display_name": "No",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01JNI1M4FPOEE684ZGdoMMupo37rBc3npH4",
+                "name": "Set Variables",
+                "title": "Set Validation message",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Validation message",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.output.variable_workflow_01JNI1FSLLZ4I1VFtM3TEutwLjtkKrCElJC$",
+                      "variable_value_new": "The mission validation has failed."
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01JNI1MP69RLU1fed01JodHiZeBQB6QbQ2A",
+        "name": "Set Variables",
+        "title": "Set Validation Variable",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Sets the WF Validation variable to True or False.",
+          "display_name": "Set Validation Variable",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01JNI1FSVLGOQ1XYwLf12DfogpJsCoU2IqF.output.variable_workflow_01JNI1FSLLZ4I1VFtM3TEutwLjtkKrCElJC$",
+              "variable_value_new": "$activity.definition_activity_01JNI1JN9BMRY5jyInMbxO3iB2WfOn5RPpl.output.jsonpath_queries.message$"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01GFV0RAKXT9C0NR8TSTvDT875Nkj2e0AVP": {
+      "unique_name": "definition_target_01GFV0RAKXT9C0NR8TSTvDT875Nkj2e0AVP",
+      "name": "Webex_Teams_Target",
+      "title": "Webex_Teams_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "Webex_Teams_Target",
+        "host": "webexapis.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01JK26DLFGA232SXSts6EEwQLFWzWM7PruF": {
+      "unique_name": "definition_target_01JK26DLFGA232SXSts6EEwQLFWzWM7PruF",
+      "name": "FJ_MISSION_VALIDATOR",
+      "title": "FJ_MISSION_VALIDATOR",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "FJ_MISSION_VALIDATOR",
+        "host": "api.firejumpermission.rocks",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    }
+  }
+}
