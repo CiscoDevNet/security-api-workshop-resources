@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "26faa2ec-75d6-4613-a50c-b4eb44763fc4",
-		"name": "Introduction to Security APIs v.1.2",
+		"name": "Introduction to Security APIs v.1.3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -537,45 +537,6 @@
 					"response": []
 				},
 				{
-					"name": "IOC feeds Copy",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{threatgrid_host}}/api/v2/iocs/feeds/domains?after=2020-01-18T21:39:13Z&before=2020-01-18T22:39:13Z&api_key={{threatgrid_key}}",
-							"protocol": "https",
-							"host": [
-								"{{threatgrid_host}}"
-							],
-							"path": [
-								"api",
-								"v2",
-								"iocs",
-								"feeds",
-								"domains"
-							],
-							"query": [
-								{
-									"key": "after",
-									"value": "2020-01-18T21:39:13Z"
-								},
-								{
-									"key": "before",
-									"value": "2020-01-18T22:39:13Z"
-								},
-								{
-									"key": "api_key",
-									"value": "{{threatgrid_key}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Feed in JSON format",
 					"request": {
 						"auth": {
@@ -584,7 +545,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{threatgrid_host}}/api/v3/feeds/dga-dns_2020-01-08.json?api_key={{threatgrid_key}}",
+							"raw": "https://{{threatgrid_host}}/api/v3/feeds/dga-dns_2020-10-08.json?api_key={{threatgrid_key}}",
 							"protocol": "https",
 							"host": [
 								"{{threatgrid_host}}"
@@ -593,7 +554,7 @@
 								"api",
 								"v3",
 								"feeds",
-								"dga-dns_2020-01-08.json"
+								"dga-dns_2020-10-08.json"
 							],
 							"query": [
 								{
