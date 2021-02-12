@@ -1,0 +1,7 @@
+fastapi==0.61.2
+Flask==1.1.2
+Flask-Ext==0.1
+Flask-Cors==3.10
+gunicorn==19.9.0
+requests==2.25.1
+Werkzeug==0.15.5
