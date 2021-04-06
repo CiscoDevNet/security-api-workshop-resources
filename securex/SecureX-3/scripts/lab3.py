@@ -6,9 +6,7 @@
 #                                                                           #
 #       Small web server showcasing how to create a REST API and            #
 #       make it interact with backend applications and data structures.     #
-#       Here the basic structure of the application will be configured      #
-#       along with WSGI and CORS, although they will not be required for    #
-#       the lab portion. A simulated token is added to show how to work     #
+#       A simulated token is added to show how to work                      #
 #       with them. A single route takes all HTTP methods and then uses if   #
 #       statements to determine what kind of method it is and takes         #
 #       appropriate action. The last call is what actually starts the       #
@@ -19,7 +17,6 @@
 #############################################################################
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 import json
 # Local Python Files That will be imported to simulate backed application and mock database
@@ -29,12 +26,11 @@ import response_json
 # Flask Web Server Setup and CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"Access-Control-Allow-Origin": "*"}})
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
 # Token that will be referenced in API header
 
-example_token = 'SEVT'
+example_token = 'Cisco-Live'
 
 
 def check_token(head):
@@ -66,10 +62,10 @@ def create_response(data, status):
     return resp
 
 
-@app.route('/sevt/', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
-def sevt():
+@app.route('/ciscolive/', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+def ciscolive():
     """
-    Flask API route for all methods to /sevt endpoint
+    Flask API route for all methods to /ciscolive endpoint
 
     Each call will be checked to determine the method and provide appropriate functionality
     :return: json object and appropriate status code
@@ -96,10 +92,10 @@ def sevt():
         return create_response(backend_app.delete_from_response_json(user), 200)
 
 
-@app.route('/sevt/<user>/', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
-def sevt_user(user):
+@app.route('/ciscolive/<user>/', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
+def ciscolive_user(user):
     """
-    Flask API route for all methods to /sevt/<user>/ endpoint
+    Flask API route for all methods to /ciscolive/<user>/ endpoint
 
     Each call will be checked to determine the method and provide appropriate functionality
     :return: json object and appropriate status code
@@ -115,7 +111,6 @@ def sevt_user(user):
         return create_response(backend_app.update_response_json(user, data), 200)
     elif request.method == 'DELETE':
         return create_response(backend_app.delete_from_response_json(user), 200)
-
 
 
 if __name__ == '__main__':

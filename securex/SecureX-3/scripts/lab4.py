@@ -1,14 +1,12 @@
 #############################################################################
 #                                                                           #
-#       Lab3 REST API Server                                                #
+#       Lab4 REST API Server                                                #
 #                                                                           #
 #       Python Flask HTTP Web Server                                        #
 #                                                                           #
 #       Small web server showcasing how to create a REST API and            #
 #       make it interact with backend applications and data structures.     #
-#       Here the basic structure of the application will be configured      #
-#       along with WSGI and CORS, although they will not be required for    #
-#       the lab portion. A simulated token is added to show how to work     #
+#       A simulated token is added to show how to work                      #
 #       with them. A single route takes all HTTP methods and then uses if   #
 #       statements to determine what kind of method it is and takes         #
 #       appropriate action. The last call is what actually starts the       #
@@ -19,23 +17,18 @@
 #############################################################################
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 import json
 import requests
-# Local Python Files That will be imported to simulate backed application and mock database
-import backend_app
-import response_json
 
 # Flask Web Server Setup and CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"Access-Control-Allow-Origin": "*"}})
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
 # Token that will be referenced in API header
 
-example_token = 'SEVT'
+example_token = 'Cisco-Live'
 
 
 def check_token(head):
@@ -68,10 +61,10 @@ def create_response(data, status):
 
 
 # Update Script To Reflect Lab Requirements
-@app.route('/YOUR-API-NAME/', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+@app.route('/example/', methods=['GET', 'POST'])
 def relay():
     """
-    Flask API route for SEVT Python Lab4
+    Flask API route for Cisco Live Python Lab4
 
     Each call will be checked to determine the method and provide appropriate functionality
     :return: json object and appropriate status code
@@ -79,12 +72,12 @@ def relay():
     if not check_token(request.headers):
         return create_response({'authentication': 'failed'}, 401)
     remote_url = 'https://jsonplaceholder.typicode.com/users/'
-    if request.method == 'UPDATE APPROPRIATE METHOD HERE':
+    if request.method == 'INSERT METHOD':
         response = requests.request(request.method, url=remote_url)
         return create_response(response.json(), response.status_code)
-    elif request.method == 'Update APPROPRIATE METHOD HERE':
+    elif request.method == 'INSERT METHODT':
         data = json.loads(request.data)
-        response = requests.request(request.method, url=remote_url, body=data)
+        response = requests.request(request.method, url=remote_url, data=data)
         return create_response(response.json(), response.status_code)
 
 
