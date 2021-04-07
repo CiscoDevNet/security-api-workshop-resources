@@ -76,7 +76,7 @@
         "base_type": "activity",
         "properties": {
           "continue_on_failure": false,
-          "description": "1. Get a list of all the events of \"Executed Malware\" type for a specific computer named `Demo_AMP_Threat_Audit`.\n2. Capture malicious sha256 associated with the first \"Executed malware\" event.\n3. Isolate infected Computer to perform further investigation and make sure that the action was successful.",
+          "description": "1. Get a list of all the events of \"Executed Malware\" type for a specific computer named `Demo_TeslaCrypt`.\n2. Capture malicious sha256 associated with the first \"Executed malware\" event.\n3. Isolate infected Computer to perform further investigation and make sure that the action was successful.",
           "display_name": "AMP",
           "skip_execution": false
         },
@@ -90,11 +90,11 @@
             "base_type": "subworkflow",
             "properties": {
               "continue_on_failure": false,
-              "description": "Get AMP Connector GUID for \"Demo_AMP_Threat_Audit\" computer.",
+              "description": "Get AMP Connector GUID for \"Demo_TeslaCrypt\" computer.",
               "display_name": "AMP - Get Connector GUID",
               "input": {
                 "variable_workflow_01EO48TNSC9JC3uWgLAXfEGqYO8MmKD2Ail": "",
-                "variable_workflow_01EO48TNSCBGM4spAE6GGj77kIra5ERGlgX": "Demo_AMP_Threat_Audit"
+                "variable_workflow_01EO48TNSCBGM4spAE6GGj77kIra5ERGlgX": "Demo_TeslaCrypt"
               },
               "runtime_user": {
                 "target_default": true
