@@ -310,7 +310,7 @@
               "description": "Request all domains for a specific sample in TG.",
               "display_name": "TG Get Sample Domains to Analyze",
               "method": "GET",
-              "relative_url": "/api/v2/samples/feeds/domains?after=2020-02-01&sample=$activity.definition_activity_01JQWO7KBENLF6l24kv3oQr7Mh2A3i810O9.output.jsonpath_queries.sample$&api_key=$global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q.global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q$",
+              "relative_url": "/api/v2/samples/feeds/domains?after=2019-12-01&sample=$activity.definition_activity_01JQWO7KBENLF6l24kv3oQr7Mh2A3i810O9.output.jsonpath_queries.sample$&api_key=$global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q.global.variable_01F606RQYRI345kP5hkeJcdOsh0gNcqD38q$",
               "runtime_user": {
                 "override_target_runtime_user": false,
                 "target_default": true
