@@ -1,0 +1,7 @@
+requests
+pyopenssl
+flask
+crayons
+marshmallow
+authlib
+
