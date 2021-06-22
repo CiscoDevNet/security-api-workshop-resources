@@ -44,7 +44,7 @@ def read_db(database,operator,filter):
     return(liste)
 
 # read ctr API keys
-with open('../keys/ctr_api_keys.txt') as creds:
+with open('keys/ctr_api_keys.txt') as creds:
     text=creds.read()
     cles=text.split('\n')
     client_id=cles[0].split('=')[1]
