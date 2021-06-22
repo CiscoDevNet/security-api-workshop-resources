@@ -2,7 +2,7 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, jsonify
 from schemas import DashboardTileDataSchema, DashboardTileSchema
 from utils import get_json, get_jwt, jsonify_data,current_date_time,date_plus_x_days,epoch_date,epoch_datetime
-from sx_get_judgments import donut,update_database,gen_bar_chart_data
+from sx_get_judgements import donut,update_database,gen_bar_chart_data
 import os
 from crayons import *
 import requests
