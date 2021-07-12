@@ -178,6 +178,7 @@ def threatgrid_search_submissions(
     query_parameters = {
         "q": sha256,
         "api_key": api_key,
+        "after": "2019-12-01T05:00:00.000Z"
     }
     
     response = requests.get(
