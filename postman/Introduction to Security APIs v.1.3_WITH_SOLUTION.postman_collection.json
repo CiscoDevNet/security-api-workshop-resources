@@ -1,0 +1,2880 @@
+{
+	"info": {
+		"_postman_id": "26faa2ec-75d6-4613-a50c-b4eb44763fc4",
+		"name": "Introduction to Security APIs v.1.3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AMP for Endpoints",
+			"item": [
+				{
+					"name": "Event Types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/event_types",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"event_types"
+							]
+						},
+						"description": "Get a listing of all event types in AMP for Endpoints"
+					},
+					"response": []
+				},
+				{
+					"name": "All Computers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // Parse the response into a variable jsonData.",
+									"// Loop through all computers listed under 'data' field.",
+									"for (var a in jsonData['data']){",
+									"    // Find the computer named 'Demo_AMP_Threat_Audit'.",
+									"    if (jsonData['data'][a]['hostname'] == 'Demo_AMP_Threat_Audit'){",
+									"        // Create new Postman variable 'amp4e_computer' and assign it with the value of connector guid.",
+									"        postman.setEnvironmentVariable('amp4e_computer_guid', jsonData['data'][a]['connector_guid']);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers"
+							]
+						},
+						"description": "Get a listing of all the computers in the network, looking specifically for what we want"
+					},
+					"response": []
+				},
+				{
+					"name": "All Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // parse the response into a variable jsonData",
+									"// Loop through all groups listed under 'data' field ",
+									"for (var a in jsonData['data']){",
+									"    // Find the group called 'Triage'",
+									"    if (jsonData['data'][a]['name'] == 'Triage'){",
+									"        // Create new Postman variable 'amp4e_new_group' and assign it with the value of GUID.",
+									"        postman.setEnvironmentVariable('amp4e_new_group', jsonData['data'][a]['guid']);",
+									"    }",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/groups",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"groups"
+							]
+						},
+						"description": "Get a listing of all the groups in AMP for Endpoints"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Simple Custom Detections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // Parse the response into a variable jsonData",
+									"for (var a in jsonData['data']){ // Loops through simple custom detection lists under 'data' field",
+									"    if (jsonData['data'][a]['name'] == 'File Block-list'){ // Find the list called 'File Block-list'",
+									"        // Create new Postman variable called 'amp4e_file_list' and assign it with the value of GUID.",
+									"        postman.setEnvironmentVariable('amp4e_file_list', jsonData['data'][a]['guid']); ",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/file_lists/simple_custom_detections",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"file_lists",
+								"simple_custom_detections"
+							]
+						},
+						"description": "Returns a list of simple custom detection file lists in AMP for Endpoints"
+					},
+					"response": []
+				},
+				{
+					"name": "All Events for a specific Computer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" // Parse the response into a variable jsonData",
+									"var jsonData = JSON.parse(responseBody);",
+									"// Save the value of malicious file's sha256, associated with this event into a Postman variable 'threatgrid_sha'",
+									"postman.setEnvironmentVariable('threatgrid_sha', jsonData['data'][0]['file']['identity']['sha256']);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/events?connector_guid[]={{amp4e_computer_guid}}&event_type[]=1107296272&event_type[]=1090519054&limit=10",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"events"
+							],
+							"query": [
+								{
+									"key": "connector_guid[]",
+									"value": "{{amp4e_computer_guid}}"
+								},
+								{
+									"key": "event_type[]",
+									"value": "1107296272"
+								},
+								{
+									"key": "event_type[]",
+									"value": "1090519054"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get a listing of all the events of \"Threat Detected\" and \"Executed Malware\" types for a specific computer."
+					},
+					"response": []
+				},
+				{
+					"name": "All Vulnerabilities for a specific Computer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/vulnerabilities?limit=10&start_time=2021-01-15&end_time=2021-01-26",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"vulnerabilities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "start_time",
+									"value": "2021-01-15"
+								},
+								{
+									"key": "end_time",
+									"value": "2021-01-26"
+								}
+							]
+						},
+						"description": "Provides a list of vulnerabilities observed on a specific computer."
+					},
+					"response": []
+				},
+				{
+					"name": "Move Computer to new Group",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "group_guid",
+									"value": "{{amp4e_new_group}}",
+									"type": "text"
+								},
+								{
+									"key": "active",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}"
+							]
+						},
+						"description": "Move computer to a group with given connector_guid and group_guid."
+					},
+					"response": []
+				},
+				{
+					"name": "Isolate infected Computer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/isolation",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"isolation"
+							]
+						},
+						"description": "Request Isolation for a Computer."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Isolation of infected Computer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/isolation",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"isolation"
+							]
+						},
+						"description": "Request Isolation for a Computer."
+					},
+					"response": []
+				},
+				{
+					"name": "Check status for Computer Isolation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/isolation",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"isolation"
+							]
+						},
+						"description": "Check if computer isolation was successful."
+					},
+					"response": []
+				},
+				{
+					"name": "Add file to Block List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/file_lists/{{amp4e_file_list}}/files/{{threatgrid_sha}}",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"file_lists",
+								"{{amp4e_file_list}}",
+								"files",
+								"{{threatgrid_sha}}"
+							]
+						},
+						"description": "Create a file list item with a given SHA-256 for a specific file list with a given file_list_guid."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Threat Grid",
+			"item": [
+				{
+					"name": "IOC feeds",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/iocs/feeds/domains?after=2021-01-18T22:29:13Z&before=2021-01-18T22:39:13Z&api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"iocs",
+								"feeds",
+								"domains"
+							],
+							"query": [
+								{
+									"key": "after",
+									"value": "2021-01-18T22:29:13Z"
+								},
+								{
+									"key": "before",
+									"value": "2021-01-18T22:39:13Z"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Feed in JSON format",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v3/feeds/dga-dns_2021-03-04.json?api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"feeds",
+								"dga-dns_2021-03-04.json"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Grab a feed in JSON format for DGA Domains with pseudo-randomly generated names"
+					},
+					"response": []
+				},
+				{
+					"name": "Feed in STIX format",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v3/feeds/ransomware-dns_2020-01-08.stix?api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"feeds",
+								"ransomware-dns_2020-01-08.stix"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Grab a feed in STIX format for ransomware DNS"
+					},
+					"response": []
+				},
+				{
+					"name": "Sample Submissions Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // parse the response into a variable jsonData",
+									"// save sample id as n Postman variable ",
+									"postman.setEnvironmentVariable('threatgrid_sample_id', jsonData['data']['items'][0]['item']['sample']); ",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/search/submissions?q={{threatgrid_sha}}&api_key={{threatgrid_key}}&after=2019-12-01T05:00:00.000Z",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"search",
+								"submissions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{threatgrid_sha}}"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								},
+								{
+									"key": "after",
+									"value": "2019-12-01T05:00:00.000Z"
+								}
+							]
+						},
+						"description": "Search for submissions of a given SHA256."
+					},
+					"response": []
+				},
+				{
+					"name": "Request Sample Domains",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var domains = [];",
+									"",
+									"postman.setEnvironmentVariable('threatgrid_sample_domains', jsonData['data']['items'][0]['domain']);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/samples/feeds/domains?sample={{threatgrid_sample_id}}&after=2019-02-01&api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"samples",
+								"feeds",
+								"domains"
+							],
+							"query": [
+								{
+									"key": "sample",
+									"value": "{{threatgrid_sample_id}}"
+								},
+								{
+									"key": "after",
+									"value": "2019-02-01"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Request all domains for a specific sample in TG and store them in an array to get more data out of them"
+					},
+					"response": []
+				},
+				{
+					"name": "Request Sample Analysis Report",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/samples/{{threatgrid_sample_id}}/analysis.json?api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"samples",
+								"{{threatgrid_sample_id}}",
+								"analysis.json"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Get the iocs section of the sample's analysis.json."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Umbrella",
+			"item": [
+				{
+					"name": "Get Single Domain Status and Categorization",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var blocklist = []",
+									"var suspect = []",
+									"for (var key in jsonData){",
+									"    if(jsonData[key][\"status\"]==-1){",
+									"        blocklist.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_block_list', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"    else if (jsonData[key][\"status\"]==0){",
+									"        suspect.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_suspect', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/domains/categorization/{{threatgrid_sample_domains}}?showLabels",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"domains",
+								"categorization",
+								"{{threatgrid_sample_domains}}"
+							],
+							"query": [
+								{
+									"key": "showLabels",
+									"value": null
+								}
+							]
+						},
+						"description": "Return domain status, security categories and content categories for a single domain."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Domain Status and Categorization Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var blocklist = []",
+									"var suspect = []",
+									"for (var key in jsonData){",
+									"    if(jsonData[key][\"status\"]==-1){",
+									"        blocklist.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_block_list', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"    else if (jsonData[key][\"status\"]==0){",
+									"        suspect.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_suspect', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/domains/categorization/{{threatgrid_sample_domains}}?showLabels",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"domains",
+								"categorization",
+								"{{threatgrid_sample_domains}}"
+							],
+							"query": [
+								{
+									"key": "showLabels",
+									"value": null
+								}
+							]
+						},
+						"description": "Return domain status, security categories and content categories for a single domain."
+					},
+					"response": []
+				},
+				{
+					"name": "REFERENCE ONLY Check Bulk domains against Investigate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var blocklist = []",
+									"var suspect = []",
+									"for (var key in jsonData){",
+									"    if(jsonData[key][\"status\"]==-1){",
+									"        blocklist.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_block_list', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"    else if (jsonData[key][\"status\"]===0){",
+									"        suspect.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_suspect', JSON.stringify(suspect,null,2))",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[{{threatgrid_sample_domains}}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/domains/categorization?showLabels",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"domains",
+								"categorization"
+							],
+							"query": [
+								{
+									"key": "showLabels",
+									"value": null
+								}
+							]
+						},
+						"description": "This API method returns the domain status, which the quickest and easiest way to know whether a domain has been flagged as malicious by the Cisco Security Labs team (score of -1 for status), if it is believed to be safe (score of 1), or if it has yet to be given a status (score of 0)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Historical Data on a Domain",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/pdns/domain/internetbadguys.com",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"pdns",
+								"domain",
+								"internetbadguys.com"
+							]
+						},
+						"description": "Get historical data from Umbrella resolvers for domains, IPs, and other resource records."
+					},
+					"response": []
+				},
+				{
+					"name": "Co-Occurences for a Domain",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/recommendations/name/internetbadguys.com.json",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"recommendations",
+								"name",
+								"internetbadguys.com.json"
+							]
+						},
+						"description": "Get a list of co-occurences for the specified domain. Unusual or suspicious co-occurence can provide additional information regarding attacks."
+					},
+					"response": []
+				},
+				{
+					"name": "Related Domains for a Domain",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/links/name/example.com.json",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"links",
+								"name",
+								"example.com.json"
+							]
+						},
+						"description": "Get a list of domain names that have been frequently seen requested around the same time (up to 60 seconds before or after) as the given domain name, but that are not frequently associated with other domain names."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Security Report for domain",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/security/name/getmalware.com.json",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"security",
+								"name",
+								"getmalware.com.json"
+							]
+						},
+						"description": "Get security information on the domain with multiple scores or security features, each of which can be used to determine relevant datapoints to build insight on the reputation or security risk posed by the site."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Risk Score for domain",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/domains/risk-score/getmalware.com",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"domains",
+								"risk-score",
+								"getmalware.com"
+							]
+						},
+						"description": "The Umbrella Investigate Risk Score is based on an analysis of the lexical characteristics of the domain name and patterns in queries and requests to the domain."
+					},
+					"response": []
+				},
+				{
+					"name": "Threat Grid Integration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/samples/getmalware.com?limit=100&sortby=score",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"samples",
+								"getmalware.com"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "100"
+								},
+								{
+									"key": "sortby",
+									"value": "score"
+								}
+							]
+						},
+						"description": "Shows samples from the ThreatGrid database associated with a domain, IP or URL. Information about samples is provided in the form of checksums associated when looking up a specific host or IP."
+					},
+					"response": []
+				},
+				{
+					"name": "Enforce on bad Domains in Umbrella",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var current_list = pm.environment.get(\"umbrella_block_list\");",
+									"console.log(current_list)",
+									"domains = JSON.parse(current_list);",
+									"var dateIso = new Date().toISOString();",
+									"var umbrella_blocklist_tmp = [];",
+									"var obj = {}",
+									"",
+									"for (var a in domains){",
+									"    obj = {\"alertTime\": dateIso,",
+									"    \"deviceId\": \"ba6a59f4-e692-4724-ba36-c28132c761de\",",
+									"    \"deviceVersion\": \"13.7a\",",
+									"    \"dstDomain\": domains[a],",
+									"    \"dstUrl\": domains[a],",
+									"    \"eventTime\": dateIso,",
+									"    \"protocolVersion\": \"1.0a\",",
+									"    \"providerName\": \"Security Platform\"};",
+									"    console.log(obj)",
+									"    umbrella_blocklist_tmp.push(obj)",
+									"    console.log(umbrella_blocklist_tmp)",
+									"}",
+									"postman.setEnvironmentVariable(\"umbrella_blocklist_enforcement\", JSON.stringify(umbrella_blocklist_tmp,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{umbrella_blocklist_enforcement}}"
+						},
+						"url": {
+							"raw": "https://{{umbrella_host}}/1.0/events?customerKey={{umbrella_key}}",
+							"protocol": "https",
+							"host": [
+								"{{umbrella_host}}"
+							],
+							"path": [
+								"1.0",
+								"events"
+							],
+							"query": [
+								{
+									"key": "customerKey",
+									"value": "{{umbrella_key}}"
+								}
+							]
+						},
+						"description": "Posts a Malware event to the API for processing and optionally adding to a customer's domain lists."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all domains in a custom Enforcement List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{umbrella_host}}/1.0/domains?customerKey={{umbrella_key}}",
+							"protocol": "https",
+							"host": [
+								"{{umbrella_host}}"
+							],
+							"path": [
+								"1.0",
+								"domains"
+							],
+							"query": [
+								{
+									"key": "customerKey",
+									"value": "{{umbrella_key}}"
+								}
+							]
+						},
+						"description": "Gather the lists of domains already added to the shared customer’s domain list"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Threat Response",
+			"item": [
+				{
+					"name": "Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"ctr_token\", jsonData['access_token']);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{ctr_client_pwd}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{ctr_client_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/oauth2/token",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"oauth2",
+								"token"
+							]
+						},
+						"description": "Generate access and refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "Inspect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('ctr_observables', JSON.stringify(jsonData,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"suspicious hash is {{threatgrid_sha}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-inspect/inspect",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-inspect",
+								"inspect"
+							]
+						},
+						"description": "The Inspect API takes in blocks of arbitrary text, and returns a list of formatted observables as a JSON object."
+					},
+					"response": []
+				},
+				{
+					"name": "Inspect Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('ctr_observables', JSON.stringify(jsonData,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"suspicious hash is {{threatgrid_sha}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-inspect/inspect",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-inspect",
+								"inspect"
+							]
+						},
+						"description": "The Inspect API takes in blocks of arbitrary text, and returns a list of formatted observables as a JSON object."
+					},
+					"response": []
+				},
+				{
+					"name": "Enrich - Deliberate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"for (var a in jsonData.data){",
+									"    if (Object.keys(jsonData.data[a].data).length>0) {",
+									"        tests[jsonData.data[a].module + \" verdicts: \" + jsonData.data[a].data.verdicts.count] = true;",
+									"        for (var v in jsonData.data[a].data.verdicts.docs) {",
+									"           tests[jsonData.data[a].module + \" verdict: \" + jsonData.data[a].data.verdicts.docs[v].disposition_name] = true; ",
+									"        }",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-enrich/deliberate/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-enrich",
+								"deliberate",
+								"observables"
+							]
+						},
+						"description": "Queries the Threat Response API for the disposition of the observable(s). This will return Judgements from your Modules about Observables, Sightings, or Sighting References. Judgement - an opinion held by an integrated product or data source about an observable at a given time."
+					},
+					"response": []
+				},
+				{
+					"name": "Enrich - Observe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var i = 0;",
+									"for (var a in jsonData.data){",
+									"    tests[\"Module: \"+jsonData.data[a].module] = true;",
+									"    i = i+1;",
+									"    if (Object.keys(jsonData.data[a].data).length>0){",
+									"        if (jsonData['data'][a]['module'] == 'AMP for Endpoints'){ // AMP for Endpoints",
+									"            if (jsonData['data'][a].data.indicators){",
+									"                count = jsonData['data'][a].data.indicators.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> count of indicators =\" + jsonData['data'][a].data.indicators.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.indicators['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.indicators.docs[i].description + \":\" + jsonData['data'][a].data.indicators.docs[i].tags]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.sightings){",
+									"                count = jsonData['data'][a].data.sightings.count;",
+									"                if (count > 0) {",
+									"                    tests[\"=> Sighting found:\"] = true;",
+									"                    tests[\"==> \"+jsonData['data'][a].data.sightings.docs[0].description] = true;",
+									"                    if (jsonData['data'][a].data.sightings.docs[0].targets){",
+									"                        tests[\"==> Target Type: \"+jsonData['data'][a].data.sightings.docs[0].targets[0].type] = true;",
+									"                        for (var y in jsonData['data'][a].data.sightings.docs[0].targets[0].observables){",
+									"                            tests[\"==> Target \"+jsonData['data'][a].data.sightings.docs[0].targets[0].observables[y].type+\": \"+jsonData['data'][a].data.sightings.docs[0].targets[0].observables[y].value] = true;",
+									"                        }",
+									"                    }",
+									"                    tests[\"=> Total count of sightings = \" + jsonData['data'][a].data.sightings.count] = true;      ",
+									"                }",
+									"            }",
+									"        }",
+									"        if (jsonData['data'][a]['module'] == 'AMP File Reputation'){",
+									"            if (jsonData['data'][a].data.verdicts){",
+									"                count = jsonData['data'][a].data.verdicts.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> Count of verdicts =\" + jsonData['data'][a].data.verdicts.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.verdicts['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.verdicts.docs[i].disposition_name]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.judgements){",
+									"                count = jsonData['data'][a].data.judgements.count;",
+									"                if (count > 0) {",
+									"                tests[\"=> Count of judgements = \" + jsonData['data'][a].data.judgements.count] = true;      ",
+									"                }",
+									"            }    ",
+									"        }",
+									"        if (jsonData['data'][a]['module'] == 'AMP Global Intelligence'){",
+									"            if (jsonData['data'][a].data.attack_patterns){",
+									"                count = jsonData['data'][a].data.attack_patterns.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> Count of attack_patterns =\" + jsonData['data'][a].data.attack_patterns.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.attack_patterns['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.attack_patterns.docs[i].description]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.indicators){",
+									"                count = jsonData['data'][a].data.indicators.count;",
+									"                if (count > 0) {",
+									"                    tests[\"=> Count of indicators = \" + jsonData['data'][a].data.indicators.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.indicators['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.indicators.docs[i].short_description]  = true;",
+									"                        tests[\"==>\"+jsonData['data'][a].data.indicators.docs[i].description]  = true;  ",
+									"                    }   ",
+									"                }",
+									"            }",
+									"        } ",
+									"        tests[jsonData.data[a].module + '====== END ===='] = true;",
+									"    } else",
+									"    {",
+									"        tests[jsonData.data[a].module + ': NO DATA'] = true;",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-enrich/observe/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-enrich",
+								"observe",
+								"observables"
+							]
+						},
+						"description": "Observe an Entity - return Sightings from your modules about any of the above entity types. Sighting - an observation of an observable. For example, an endpoint detecting a file hash detected on a filesystem, or on the network by a firewall."
+					},
+					"response": []
+				},
+				{
+					"name": "Refer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-enrich/refer/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-enrich",
+								"refer",
+								"observables"
+							]
+						},
+						"description": "Fetch References for an Entity - returns a list of URLs and names to which the user can go for more information. For example, to pivot to Umbrella for domain intelligence."
+					},
+					"response": []
+				},
+				{
+					"name": "Response - Observables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"for (var a in jsonData.data)",
+									"{",
+									"    if (jsonData.data[a].id == \"amp-add-sha256-scd\") {",
+									"        postman.setEnvironmentVariable('ctr_response_url', jsonData.data[a].url);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-response/respond/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-response",
+								"respond",
+								"observables"
+							]
+						},
+						"description": "Fetch the list of available response actions and modules for a given observable."
+					},
+					"response": []
+				},
+				{
+					"name": "Response - Trigger action",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-response{{ctr_response_url}}",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-response{{ctr_response_url}}"
+							]
+						},
+						"description": "Add a malicious sha256 to AMP Simple Custom Detections list named Quarantine."
+					},
+					"response": []
+				},
+				{
+					"name": "Response - Trigger action Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-response{{ctr_response_url}}",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-response{{ctr_response_url}}"
+							]
+						},
+						"description": "Add a malicious sha256 to AMP Simple Custom Detections list named Quarantine."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Solution: Build API Workflow",
+			"item": [
+				{
+					"name": "1.a) Find Endpoint Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"for (var a in jsonData['data']){",
+									"    if (jsonData['data'][a]['hostname'] == 'Demo_AMP_Threat_Audit'){",
+									"        postman.setEnvironmentVariable('amp4e_computer_guid', jsonData['data'][a]['connector_guid']);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers"
+							]
+						},
+						"description": "Get a listing of all the computers in the network, looking specifically for what we want"
+					},
+					"response": []
+				},
+				{
+					"name": "1.b) Find all events where Malware Executed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('threatgrid_sha', jsonData['data'][0]['file']['identity']['sha256']);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/events?connector_guid[]={{amp4e_computer_guid}}&event_type[]=1107296272",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"events"
+							],
+							"query": [
+								{
+									"key": "connector_guid[]",
+									"value": "{{amp4e_computer_guid}}"
+								},
+								{
+									"key": "event_type[]",
+									"value": "1107296272"
+								}
+							]
+						},
+						"description": "Get a listing of all the events for a specific computer when the quarantine failed"
+					},
+					"response": []
+				},
+				{
+					"name": "2.a) Isolate infected Computer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/isolation",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"isolation"
+							]
+						},
+						"description": "Request Isolation for a Computer."
+					},
+					"response": []
+				},
+				{
+					"name": "2.b) Check status for Computer Isolation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://{{amp4e_client_id}}:{{amp4e_api_key}}@{{amp4e_host}}/v1/computers/{{amp4e_computer_guid}}/isolation",
+							"protocol": "https",
+							"auth": {
+								"user": "{{amp4e_client_id}}",
+								"password": "{{amp4e_api_key}}"
+							},
+							"host": [
+								"{{amp4e_host}}"
+							],
+							"path": [
+								"v1",
+								"computers",
+								"{{amp4e_computer_guid}}",
+								"isolation"
+							]
+						},
+						"description": "Check if computer isolation was successful."
+					},
+					"response": []
+				},
+				{
+					"name": "3.) Find Samples in  Threat Grid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // parse the response into a variable jsonData",
+									"// save sample id as n Postman variable ",
+									"postman.setEnvironmentVariable('threatgrid_sample_id', jsonData['data']['items'][0]['item']['sample']); ",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/search/submissions?q={{threatgrid_sha}}&api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"search",
+								"submissions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{threatgrid_sha}}"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Search for submissions of a given SHA256."
+					},
+					"response": []
+				},
+				{
+					"name": "4.) Get all sample domains to analyze",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var domains = [];",
+									"",
+									"postman.setEnvironmentVariable('threatgrid_sample_domains', jsonData['data']['items'][0]['domain']);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{threatgrid_host}}/api/v2/samples/feeds/domains?sample={{threatgrid_sample_id}}&after=2020-02-01&api_key={{threatgrid_key}}",
+							"protocol": "https",
+							"host": [
+								"{{threatgrid_host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"samples",
+								"feeds",
+								"domains"
+							],
+							"query": [
+								{
+									"key": "sample",
+									"value": "{{threatgrid_sample_id}}"
+								},
+								{
+									"key": "after",
+									"value": "2020-02-01"
+								},
+								{
+									"key": "api_key",
+									"value": "{{threatgrid_key}}"
+								}
+							]
+						},
+						"description": "Request all domains for a specific sample in TG and store the first one form the list to get more data about it."
+					},
+					"response": []
+				},
+				{
+					"name": "5.) Get Single Domain Status and Categorization",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var blocklist = []",
+									"var suspect = []",
+									"for (var key in jsonData){",
+									"    if(jsonData[key][\"status\"]==-1){",
+									"        blocklist.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_block_list', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"    else if (jsonData[key][\"status\"]==0){",
+									"        suspect.push(key)",
+									"        postman.setEnvironmentVariable('umbrella_suspect', JSON.stringify(blocklist,null,2))",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{investigate_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://investigate.api.umbrella.com/domains/categorization/{{threatgrid_sample_domains}}?showLabels",
+							"protocol": "https",
+							"host": [
+								"investigate",
+								"api",
+								"umbrella",
+								"com"
+							],
+							"path": [
+								"domains",
+								"categorization",
+								"{{threatgrid_sample_domains}}"
+							],
+							"query": [
+								{
+									"key": "showLabels",
+									"value": null
+								}
+							]
+						},
+						"description": "Return domain status, security categories and content categories for a single domain."
+					},
+					"response": []
+				},
+				{
+					"name": "6.) Enforce on bad Domains in Umbrella",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var current_list = pm.environment.get(\"umbrella_block_list\");",
+									"console.log(current_list)",
+									"domains = JSON.parse(current_list);",
+									"var dateIso = new Date().toISOString();",
+									"var umbrella_blocklist_tmp = [];",
+									"var obj = {}",
+									"",
+									"for (var a in domains){",
+									"    obj = {\"alertTime\": dateIso,",
+									"    \"deviceId\": \"ba6a59f4-e692-4724-ba36-c28132c761de\",",
+									"    \"deviceVersion\": \"13.7a\",",
+									"    \"dstDomain\": domains[a],",
+									"    \"dstUrl\": domains[a],",
+									"    \"eventTime\": dateIso,",
+									"    \"protocolVersion\": \"1.0a\",",
+									"    \"providerName\": \"Security Platform\"};",
+									"    console.log(obj)",
+									"    umbrella_blocklist_tmp.push(obj)",
+									"    console.log(umbrella_blocklist_tmp)",
+									"}",
+									"postman.setEnvironmentVariable(\"umbrella_blocklist_enforcement\", JSON.stringify(umbrella_blocklist_tmp,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{umbrella_blocklist_enforcement}}"
+						},
+						"url": {
+							"raw": "https://{{umbrella_host}}/1.0/events?customerKey={{umbrella_key}}",
+							"protocol": "https",
+							"host": [
+								"{{umbrella_host}}"
+							],
+							"path": [
+								"1.0",
+								"events"
+							],
+							"query": [
+								{
+									"key": "customerKey",
+									"value": "{{umbrella_key}}"
+								}
+							]
+						},
+						"description": "Posts a Malware event to the API for processing and optionally adding to a customer's domain lists."
+					},
+					"response": []
+				},
+				{
+					"name": "7.a) CTR Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"ctr_token\", jsonData['access_token']);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{ctr_client_pwd}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{ctr_client_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/oauth2/token",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"oauth2",
+								"token"
+							]
+						},
+						"description": "Generate access and refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "7.b) CTR Inspect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('ctr_observables', JSON.stringify(jsonData,null,2));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"suspicious hash is {{threatgrid_sha}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-inspect/inspect",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-inspect",
+								"inspect"
+							]
+						},
+						"description": "The Inspect API takes in blocks of arbitrary text, and returns a list of formatted observables as a JSON object."
+					},
+					"response": []
+				},
+				{
+					"name": "7.c) Enrich - Observe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var i = 0;",
+									"for (var a in jsonData.data){",
+									"    tests[\"Module: \"+jsonData.data[a].module] = true;",
+									"    i = i+1;",
+									"    if (Object.keys(jsonData.data[a].data).length>0){",
+									"        if (jsonData['data'][a]['module'] == 'AMP EDR'){",
+									"            if (jsonData['data'][a].data.indicators){",
+									"                count = jsonData['data'][a].data.indicators.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> count of indicators =\" + jsonData['data'][a].data.indicators.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.indicators['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.indicators.docs[i].description + \":\" + jsonData['data'][a].data.indicators.docs[i].tags]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.sightings){",
+									"                count = jsonData['data'][a].data.sightings.count;",
+									"                if (count > 0) {",
+									"                    tests[\"=> Sighting found:\"] = true;",
+									"                    tests[\"==> \"+jsonData['data'][a].data.sightings.docs[0].description] = true;",
+									"                    if (jsonData['data'][a].data.sightings.docs[0].targets){",
+									"                        tests[\"==> Target Type: \"+jsonData['data'][a].data.sightings.docs[0].targets[0].type] = true;",
+									"                        for (var y in jsonData['data'][a].data.sightings.docs[0].targets[0].observables){",
+									"                            tests[\"==> Target \"+jsonData['data'][a].data.sightings.docs[0].targets[0].observables[y].type+\": \"+jsonData['data'][a].data.sightings.docs[0].targets[0].observables[y].value] = true;",
+									"                        }",
+									"                    }",
+									"                    tests[\"=> Total count of sightings = \" + jsonData['data'][a].data.sightings.count] = true;      ",
+									"                }",
+									"            }",
+									"        }",
+									"        if (jsonData['data'][a]['module'] == 'AMP File Reputation'){",
+									"            if (jsonData['data'][a].data.verdicts){",
+									"                count = jsonData['data'][a].data.verdicts.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> Count of verdicts =\" + jsonData['data'][a].data.verdicts.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.verdicts['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.verdicts.docs[i].disposition_name]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.judgements){",
+									"                count = jsonData['data'][a].data.judgements.count;",
+									"                if (count > 0) {",
+									"                tests[\"=> Count of judgements = \" + jsonData['data'][a].data.judgements.count] = true;      ",
+									"                }",
+									"            }    ",
+									"        }",
+									"        if (jsonData['data'][a]['module'] == 'AMP Global Intelligence'){",
+									"            if (jsonData['data'][a].data.attack_patterns){",
+									"                count = jsonData['data'][a].data.attack_patterns.count;",
+									"                if (count > 0){",
+									"                    tests[\"=> Count of attack_patterns =\" + jsonData['data'][a].data.attack_patterns.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.attack_patterns['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.attack_patterns.docs[i].description]  = true;  ",
+									"                    }    ",
+									"                }",
+									"            }",
+									"            if (jsonData['data'][a].data.indicators){",
+									"                count = jsonData['data'][a].data.indicators.count;",
+									"                if (count > 0) {",
+									"                    tests[\"=> Count of indicators = \" + jsonData['data'][a].data.indicators.count] = true;   ",
+									"                    for (var i in jsonData['data'][a].data.indicators['docs']){",
+									"                        tests[\"==> \"+jsonData['data'][a].data.indicators.docs[i].short_description]  = true;",
+									"                        tests[\"==>\"+jsonData['data'][a].data.indicators.docs[i].description]  = true;  ",
+									"                    }   ",
+									"                }",
+									"            }",
+									"        } ",
+									"        tests[jsonData.data[a].module + '====== END ===='] = true;",
+									"    } else",
+									"    {",
+									"        tests[jsonData.data[a].module + ': NO DATA'] = true;",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-enrich/observe/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-enrich",
+								"observe",
+								"observables"
+							]
+						},
+						"description": "Observe an Entity - return Sightings from your modules about any of the above entity types. Sighting - an observation of an observable. For example, an endpoint detecting a file hash detected on a filesystem, or on the network by a firewall."
+					},
+					"response": []
+				},
+				{
+					"name": "8.a) Response - Observables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"for (var a in jsonData.data)",
+									"{",
+									"    if (jsonData.data[a].id == \"amp-add-sha256-scd\") {",
+									"        postman.setEnvironmentVariable('ctr_response_url', jsonData.data[a].url);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{ctr_observables}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-response/respond/observables",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-response",
+								"respond",
+								"observables"
+							]
+						},
+						"description": "Fetch the list of available response actions and modules for a given observable."
+					},
+					"response": []
+				},
+				{
+					"name": "8.b) Response - Trigger action",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ctr_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ctr_host}}/iroh/iroh-response{{ctr_response_url}}",
+							"protocol": "https",
+							"host": [
+								"{{ctr_host}}"
+							],
+							"path": [
+								"iroh",
+								"iroh-response{{ctr_response_url}}"
+							]
+						},
+						"description": "Add a malicious sha256 to AMP Simple Custom Detections list named Quarantine."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mission: Build API Workflow",
+			"item": []
+		},
+		{
+			"name": "Validate Mission",
+			"item": [
+				{
+					"name": "Step 1 - Fetch Your Webex User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody); // Parse the response into a variable jsonData.",
+									"postman.setEnvironmentVariable('webex_id', jsonData['id']);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{webex_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.ciscospark.com/v1/people/me",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ciscospark",
+								"com"
+							],
+							"path": [
+								"v1",
+								"people",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step 2 - Validate the Postman mission",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"threatgrid_sha\": \"{{threatgrid_sha}}\",\n    \"threatgrid_sample_id\": \"{{threatgrid_sample_id}}\",\n    \"threatgrid_sample_domains\": \"{{threatgrid_sample_domains}}\",\n    \"umbrella_block_list\": {{umbrella_block_list}},\n    \"umbrella_blocklist_enforcement\": {{umbrella_blocklist_enforcement}},\n    \"ctr_observables\": {{ctr_observables}},\n    \"ctr_response_url\": \"{{ctr_response_url}}\",\n    \"webex_id\":\"{{webex_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.firejumpermission.rocks/postman/submit",
+							"protocol": "https",
+							"host": [
+								"api",
+								"firejumpermission",
+								"rocks"
+							],
+							"path": [
+								"postman",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Step 3 - Check Postman Mission Validation Result",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.firejumpermission.rocks/postman/status/{{webex_id}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"firejumpermission",
+								"rocks"
+							],
+							"path": [
+								"postman",
+								"status",
+								"{{webex_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
